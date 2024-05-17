@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 8),
               child: Text(
                 'Top Rated Movies',
                 style: TextStyle(
@@ -88,98 +88,101 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xFFE2B616)),
               ),
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 800,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 500.0,
-                      autoPlay: true,
-                      aspectRatio: 16 / 9,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      autoPlayAnimationDuration: const Duration(seconds: 1),
-                      enableInfiniteScroll: true,
-                      pageSnapping: true,
-                      enlargeCenterPage: true,
-                      viewportFraction: 1.0,
-                    ),
-                    items: topRatedMovies.map((movie) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (conext) =>
-                                          MovieDetailsPage(movie: movie)));
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(0),
-                              child: Image.network(
-                                'https://image.tmdb.org/t/p/w500/${movie.backdropPath}',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 800,
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        height: 500.0,
+                        autoPlay: true,
+                        aspectRatio: 16 / 9,
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        autoPlayAnimationDuration: const Duration(seconds: 1),
+                        enableInfiniteScroll: true,
+                        pageSnapping: true,
+                        enlargeCenterPage: true,
+                        viewportFraction: 1.0,
+                      ),
+                      items: topRatedMovies.map((movie) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (conext) =>
+                                            MovieDetailsPage(movie: movie)));
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(0),
+                                child: Image.network(
+                                  'https://image.tmdb.org/t/p/w500/${movie.backdropPath}',
+                                  fit: BoxFit.cover,
+                                  width: MediaQuery.of(context).size.width,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        'Now Playing',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFE2B616)),
-                      ),
+                            );
+                          },
+                        );
+                      }).toList(),
                     ),
-                    SizedBox(
-                      width: 350,
-                      height: 500,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics:
-                            NeverScrollableScrollPhysics(), // Disable scrolling in the sidebar
-                        itemCount: nowPlayingMovies.length,
-                        itemBuilder: (context, index) {
-                          final movie = nowPlayingMovies[index];
-                          return ListTile(
-                            leading: Image.network(
-                              'https://image.tmdb.org/t/p/w200${movie.posterPath}',
-                              width: 80,
-                              height: 120,
-                              fit: BoxFit.cover,
-                            ),
-                            title: Text(
-                              movie.title,
-                              style: const TextStyle(color: Color(0xFFE2B616)),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              movie.overview,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'Now Playing',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFE2B616)),
+                        ),
                       ),
-                    )
-                  ],
-                )
-              ],
+                      SizedBox(
+                        width: 350,
+                        height: 470,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: nowPlayingMovies.length,
+                          itemBuilder: (context, index) {
+                            final movie = nowPlayingMovies[index];
+                            return ListTile(
+                              leading: Image.network(
+                                'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                                width: 80,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
+                              title: Text(
+                                movie.title,
+                                style:
+                                    const TextStyle(color: Color(0xFFE2B616)),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                movie.overview,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(16.0),

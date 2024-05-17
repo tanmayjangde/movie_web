@@ -42,44 +42,72 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SizedBox(
-          width: double.infinity,
-          height: 40,
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(5)),
-            child: Center(
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      // Clear search text
-                    },
+        title: Row(
+          children: [
+            SizedBox(
+              width: 50,
+            ),
+            TextButton(
+              onPressed: () {}, // Add functionality here if needed
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFE2B616),
+              ),
+              child: Text(
+                'TMDB',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            SizedBox(
+              width: 850,
+              height: 40,
+              child: Container(
+                margin: const EdgeInsets.only(left: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Center(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {},
+                      ),
+                      hintText: 'Search...',
+                      border: InputBorder.none,
+                    ),
                   ),
-                  hintText: 'Search...',
-                  border: InputBorder.none,
                 ),
               ),
             ),
-          ),
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () => _onItemTapped(0),
-            child: Text(
-              'Home',
-              style: TextStyle(
-                  color: Color(0xFFE2B616), fontWeight: FontWeight.bold),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Home',
+                style: TextStyle(
+                  color: Color(0xFFE2B616),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           TextButton(
             onPressed: () => _onItemTapped(1),
-            child: Text(
-              'Movies',
-              style: TextStyle(
-                  color: Color(0xFFE2B616), fontWeight: FontWeight.bold),
+            child: const Padding(
+              padding: EdgeInsets.only(right: 50),
+              child: Text(
+                'Movies',
+                style: TextStyle(
+                  color: Color(0xFFE2B616),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ],

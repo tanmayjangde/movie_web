@@ -234,8 +234,8 @@ class _MoviesPageState extends State<MoviesPage> {
             itemCount: movies.length,
             itemBuilder: (context, index) {
               final movie = movies[index];
-              return Padding(
-                padding: EdgeInsets.all(8),
+              return Card(
+                elevation: 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -244,16 +244,22 @@ class _MoviesPageState extends State<MoviesPage> {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                          width: double.infinity,
+                          height: 200,
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      movie.title,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        movie.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

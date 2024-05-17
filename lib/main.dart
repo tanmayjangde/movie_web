@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movie_web/home.dart';
+import 'package:movie_web/movie_details.dart';
 import 'package:movie_web/movies.dart';
+import 'package:movie_web/search_page.dart';
 
 const apiKey = '2f048e3e025ffe9e1552507e8f3c18e4';
 
@@ -9,12 +12,33 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final GoRouter _router = GoRouter(routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => MainScreen(),
+    ),
+    GoRoute(
+      path: '/movie/:id',
+      builder: (context, state) {
+        final String id = state.pathParameters['id']!;
+        return MovieDetails(movieId: id);
+      },
+    ),
+    GoRoute(
+      path: '/search/:query',
+      builder: (context, state) {
+        final String query = state.pathParameters['query']!;
+        return SearchPage(query: query);
+      },
+    ),
+  ]);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Movie Web App',
-      theme: ThemeData.dark(), // Set dark theme here
-      home: MainScreen(),
+      routerConfig: _router,
+      theme: ThemeData.dark(),
     );
   }
 }
@@ -36,6 +60,10 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _onSearch(String query) {
+    context.go('/search?query=$query');
   }
 
   @override
@@ -68,6 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 child: Center(
                   child: TextField(
+                    onSubmitted: _onSearch,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
                       suffixIcon: IconButton(

@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   List<Movie> nowPlayingMovies = [];
   List<Movie> upcomingMovies = [];
   String selectedFilter = 'popular';
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -24,6 +25,11 @@ class _HomePageState extends State<HomePage> {
     fetchTopRatedMovies();
     fetchPopularMovies();
     fetchNowPlayingMovies();
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   Future<void> fetchTopRatedMovies() async {
@@ -94,38 +100,41 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   width: 800,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 500.0,
-                      autoPlay: true,
-                      aspectRatio: 16 / 9,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      autoPlayAnimationDuration: const Duration(seconds: 1),
-                      enableInfiniteScroll: true,
-                      pageSnapping: true,
-                      enlargeCenterPage: true,
-                      viewportFraction: 1.0,
-                    ),
-                    items: topRatedMovies.map((movie) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return GestureDetector(
-                            onTap: () {
-                              context.go('/movie/${movie.id}');
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(0),
-                              child: Image.network(
-                                'https://image.tmdb.org/t/p/w500/${movie.backdropPath}',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
+                  child: isLoading
+                      ? _buildSkeletonCarousel()
+                      : CarouselSlider(
+                          options: CarouselOptions(
+                            height: 500.0,
+                            autoPlay: true,
+                            aspectRatio: 16 / 9,
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            autoPlayAnimationDuration:
+                                const Duration(seconds: 1),
+                            enableInfiniteScroll: true,
+                            pageSnapping: true,
+                            enlargeCenterPage: true,
+                            viewportFraction: 1.0,
+                          ),
+                          items: topRatedMovies.map((movie) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.go('/movie/${movie.id}');
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(0),
+                                    child: Image.network(
+                                      'https://image.tmdb.org/t/p/w500/${movie.backdropPath}',
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
                 ),
                 const SizedBox(
                   width: 20,
@@ -143,39 +152,43 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    // Display ListView for Now Playing Movies
                     SizedBox(
                       width: 350,
                       height: 470,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: nowPlayingMovies.length,
-                        itemBuilder: (context, index) {
-                          final movie = nowPlayingMovies[index];
-                          return ListTile(
-                            onTap: () {
-                              context.go('/movie/${movie.id}');
-                            },
-                            leading: Image.network(
-                              'https://image.tmdb.org/t/p/w200${movie.posterPath}',
-                              width: 80,
-                              height: 120,
-                              fit: BoxFit.cover,
+                      child: isLoading
+                          ? _buildSkeletonNowPlaying()
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: nowPlayingMovies.length,
+                              itemBuilder: (context, index) {
+                                final movie = nowPlayingMovies[index];
+                                return ListTile(
+                                  onTap: () {
+                                    context.go('/movie/${movie.id}');
+                                  },
+                                  leading: Image.network(
+                                    'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                                    width: 80,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  title: Text(
+                                    movie.title,
+                                    style: const TextStyle(
+                                        color: Color(0xFFE2B616)),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  subtitle: Text(
+                                    movie.overview,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              },
                             ),
-                            title: Text(
-                              movie.title,
-                              style: const TextStyle(color: Color(0xFFE2B616)),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              movie.overview,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        },
-                      ),
                     )
                   ],
                 )
@@ -188,43 +201,46 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
+            // Display Row for Popular Movies
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.generate(popularMovies.length, (index) {
-                    final movie = popularMovies[index];
-                    return GestureDetector(
-                      onTap: () {
-                        context.go('/movie/${movie.id}');
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        width: 150,
-                        child: Column(
-                          children: [
-                            Image.network(
-                              'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                  children: isLoading
+                      ? _buildSkeletonPopularMovies()
+                      : List.generate(popularMovies.length, (index) {
+                          final movie = popularMovies[index];
+                          return GestureDetector(
+                            onTap: () {
+                              context.go('/movie/${movie.id}');
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
                               width: 150,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            SizedBox(
-                              child: Text(
-                                movie.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                    'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                                    width: 150,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  SizedBox(
+                                    child: Text(
+                                      movie.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
+                            ),
+                          );
+                        }),
                 ),
               ),
             ),
@@ -235,5 +251,80 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget _buildSkeletonCarousel() {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 500.0,
+        autoPlay: true,
+        aspectRatio: 16 / 9,
+        autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlayAnimationDuration: const Duration(seconds: 1),
+        enableInfiniteScroll: true,
+        pageSnapping: true,
+        enlargeCenterPage: true,
+        viewportFraction: 1.0,
+      ),
+      items: List.generate(5, (index) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              color: Colors.grey[800],
+            );
+          },
+        );
+      }),
+    );
+  }
+
+  Widget _buildSkeletonNowPlaying() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Container(
+            color: Colors.grey[800],
+            width: 80,
+            height: 120,
+          ),
+          title: Container(
+            color: Colors.grey[800],
+            height: 20,
+          ),
+          subtitle: Container(
+            color: Colors.grey[800],
+            height: 40,
+          ),
+        );
+      },
+    );
+  }
+
+  _buildSkeletonPopularMovies() {
+    return List.generate(5, (index) {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        width: 150,
+        child: Column(
+          children: [
+            Container(
+              color: Colors.grey[800],
+              width: 150,
+              height: 200,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Container(
+              color: Colors.grey[800],
+              height: 20,
+            )
+          ],
+        ),
+      );
+    });
   }
 }

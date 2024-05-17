@@ -106,6 +106,10 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       hintText: 'Search...',
                       border: InputBorder.none,
+                      labelStyle: const TextStyle(
+                        color:
+                            Colors.black, // Change this to your desired color
+                      ),
                     ),
                   ),
                 ),

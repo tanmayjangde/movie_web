@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onSearch(String query) {
-    context.go('/search?query=$query');
+    context.go('/search/$query');
   }
 
   @override

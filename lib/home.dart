@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:movie_web/movie_details.dart';
 import 'package:movie_web/movie_model.dart';
 
 class HomePage extends StatefulWidget {

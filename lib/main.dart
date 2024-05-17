@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:movie_web/home.dart';
 import 'package:movie_web/movie_details.dart';
@@ -50,6 +51,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  TextEditingController controller = TextEditingController();
 
   final List<Widget> _pages = [
     HomePage(),
@@ -88,29 +90,29 @@ class _MainScreenState extends State<MainScreen> {
             ),
             SizedBox(
               width: 850,
-              height: 40,
+              height: 45,
               child: Container(
                 margin: const EdgeInsets.only(left: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: Center(
-                  child: TextField(
-                    onSubmitted: _onSearch,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {},
-                      ),
-                      hintText: 'Search...',
-                      border: InputBorder.none,
-                      labelStyle: const TextStyle(
-                        color:
-                            Colors.black, // Change this to your desired color
-                      ),
+                child: TextField(
+                  style: const TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20),
+                  controller: controller,
+                  onSubmitted: _onSearch,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {},
                     ),
+                    hintText: 'Search...',
+                    border: InputBorder.none,
                   ),
                 ),
               ),

@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const Padding(
-              padding: EdgeInsets.all(50.0),
+              padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 25),
               child: Text(
                 'Explore Popular Movies',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:movie_web/movie_model.dart';
 
 class MovieDetails extends StatefulWidget {
   final String movieId;
@@ -13,12 +16,14 @@ class MovieDetails extends StatefulWidget {
 
 class _MovieDetailsState extends State<MovieDetails> {
   Map<String, dynamic>? details;
+  List<Movie>? similarMovies = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     fetchDetails();
+    fetchSimilarMovies();
   }
 
   Future<void> fetchDetails() async {
@@ -35,6 +40,22 @@ class _MovieDetailsState extends State<MovieDetails> {
     }
   }
 
+  Future<void> fetchSimilarMovies() async {
+    final response = await http.get(Uri.parse(
+        'https://api.themoviedb.org/3/movie/${widget.movieId}/similar?language=en-US&api_key=2f048e3e025ffe9e1552507e8f3c18e4'));
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      setState(() {
+        similarMovies = (json.decode(response.body)['results'] as List)
+            .map((movieData) => Movie.fromJson(movieData))
+            .toList();
+      });
+    } else {
+      throw Exception('Failed to load similar movies');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +68,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                   children: [
                     Column(
                       children: [
-                        Container(
+                        SizedBox(
                           height: 400,
                           child: Stack(
                             children: [
@@ -92,48 +113,62 @@ class _MovieDetailsState extends State<MovieDetails> {
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      details!['original_title'],
-                                      style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        details!['original_title'],
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      '(${details!['release_date']?.substring(0, 4)})',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        '(${details!['release_date']?.substring(0, 4)})',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      details!['tagline'] ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontStyle: FontStyle.italic,
-                                        color: Colors.grey,
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        details!['tagline'] ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontStyle: FontStyle.italic,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      details!['overview'] ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        details!['overview'] ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                    ),
-                                    if (details!['genres'] != null)
+                                      if (details!['genres'] != null)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            'Genres: ${details!['genres'].map((genre) => genre['name']).join(", ")}',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontStyle: FontStyle.italic,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(top: 8.0),
                                         child: Text(
-                                          'Genres: ${details!['genres'].map((genre) => genre['name']).join(", ")}',
+                                          'Original language: ${details!['spoken_languages']?[0]['name'] ?? ''}',
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontStyle: FontStyle.italic,
@@ -141,29 +176,20 @@ class _MovieDetailsState extends State<MovieDetails> {
                                           ),
                                         ),
                                       ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        'Original language: ${details!['spoken_languages']?[0]['name'] ?? ''}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontStyle: FontStyle.italic,
-                                          color: Colors.grey,
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          'Released Date: ${details!['release_date'] ?? ''}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.grey,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        'Released Date: ${details!['release_date'] ?? ''}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontStyle: FontStyle.italic,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -173,7 +199,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                     ),
                   ],
                 )
-              : Center(
+              : const Center(
                   child: Text('Failed to load movie details'),
                 ),
     );

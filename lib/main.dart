@@ -82,7 +82,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
               child: Text(
                 'TMDB',
-                style: TextStyle(color: Colors.black),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(

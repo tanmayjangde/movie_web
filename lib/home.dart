@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   List<Movie> upcomingMovies = [];
   String selectedFilter = 'popular';
   bool isLoading = true;
+  int? _hoveredIndex;
 
   @override
   void initState() {
@@ -253,71 +254,97 @@ class _HomePageState extends State<HomePage> {
                         itemCount: popularMovies.length,
                         itemBuilder: (context, index) {
                           final movie = popularMovies[index];
-                          return GestureDetector(
-                            onTap: () {
-                              context.go('/movie/${movie.id}');
+                          return MouseRegion(
+                            onEnter: (_) {
+                              setState(() {
+                                _hoveredIndex = index;
+                              });
                             },
-                            child: Card(
-                              elevation: 4,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(8),
-                                          topRight: Radius.circular(8)),
-                                      child: Image.network(
-                                        'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
-                                        width: double.infinity,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                            onExit: (_) {
+                              setState(() {
+                                _hoveredIndex = null;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              transform: _hoveredIndex == index
+                                  ? (Matrix4.identity()
+                                    ..scale(1.05, 1.05)
+                                    ..translate(0, -10))
+                                  : Matrix4.identity(),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.go('/movie/${movie.id}');
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Card(
+                                    elevation: _hoveredIndex == index ? 20 : 4,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          movie.title,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                        Expanded(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8)),
+                                            child: Image.network(
+                                              'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                                              width: double.infinity,
+                                              height: 200,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         const SizedBox(
                                           height: 4,
                                         ),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.star,
-                                                color: Colors.amber),
-                                            Text(
-                                                '${movie.voteAverage} (${movie.voteCount} votes)'),
-                                          ],
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                movie.title,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.star,
+                                                      color: Colors.amber),
+                                                  Text(
+                                                      '${movie.voteAverage} (${movie.voteCount} votes)'),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                  'Language: ${movie.originalLanguage}'),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                  'Adult: ${movie.adult ? 'Yes' : 'No'}'),
+                                            ],
+                                          ),
                                         ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Text(
-                                            'Language: ${movie.originalLanguage}'),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Text(
-                                            'Adult: ${movie.adult ? 'Yes' : 'No'}'),
                                       ],
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           );

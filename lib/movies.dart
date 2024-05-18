@@ -95,9 +95,93 @@ class _MoviesPageState extends State<MoviesPage> {
     }
   }
 
+  TextEditingController controller = TextEditingController();
+  void _onSearch(String query) {
+    context.go('/search/$query');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            SizedBox(
+              width: 50,
+            ),
+            TextButton(
+              onPressed: () {}, // Add functionality here if needed
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFE2B616),
+              ),
+              child: Text(
+                'TMDB',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              width: 850,
+              height: 45,
+              child: Container(
+                margin: const EdgeInsets.only(left: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextField(
+                  style: const TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20),
+                  controller: controller,
+                  onSubmitted: _onSearch,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {},
+                    ),
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.go('/');
+            },
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Home',
+                style: TextStyle(
+                  color: Color(0xFFE2B616),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: const Padding(
+              padding: EdgeInsets.only(right: 50),
+              child: Text(
+                'Movies',
+                style: TextStyle(
+                  color: Color(0xFFE2B616),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

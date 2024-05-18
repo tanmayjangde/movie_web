@@ -98,100 +98,107 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 800,
-                  child: isLoading
-                      ? _buildSkeletonCarousel()
-                      : CarouselSlider(
-                          options: CarouselOptions(
-                            height: 500.0,
-                            autoPlay: true,
-                            aspectRatio: 16 / 9,
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            autoPlayAnimationDuration:
-                                const Duration(seconds: 1),
-                            enableInfiniteScroll: true,
-                            pageSnapping: true,
-                            enlargeCenterPage: true,
-                            viewportFraction: 1.0,
-                          ),
-                          items: topRatedMovies.map((movie) {
-                            return Builder(
-                              builder: (BuildContext context) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    context.go('/movie/${movie.id}');
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(0),
-                                    child: Image.network(
-                                      'https://image.tmdb.org/t/p/w500/${movie.backdropPath}',
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
+                Flexible(
+                  flex: 2,
+                  child: SizedBox(
+                    width: 800,
+                    child: isLoading
+                        ? _buildSkeletonCarousel()
+                        : CarouselSlider(
+                            options: CarouselOptions(
+                              height: 500.0,
+                              autoPlay: true,
+                              aspectRatio: 16 / 9,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              autoPlayAnimationDuration:
+                                  const Duration(seconds: 1),
+                              enableInfiniteScroll: true,
+                              pageSnapping: true,
+                              enlargeCenterPage: true,
+                              viewportFraction: 1.0,
+                            ),
+                            items: topRatedMovies.map((movie) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      context.go('/movie/${movie.id}');
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(0),
+                                      child: Image.network(
+                                        'https://image.tmdb.org/t/p/w500/${movie.backdropPath}',
+                                        fit: BoxFit.cover,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                  ),
                 ),
                 const SizedBox(
                   width: 20,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 0),
-                      child: Text(
-                        'Now Playing',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                Flexible(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 0),
+                        child: Text(
+                          'Now Playing',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    // Display ListView for Now Playing Movies
-                    SizedBox(
-                      width: 350,
-                      height: 470,
-                      child: isLoading
-                          ? _buildSkeletonNowPlaying()
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: nowPlayingMovies.length,
-                              itemBuilder: (context, index) {
-                                final movie = nowPlayingMovies[index];
-                                return ListTile(
-                                  onTap: () {
-                                    context.go('/movie/${movie.id}');
-                                  },
-                                  leading: Image.network(
-                                    'https://image.tmdb.org/t/p/w200${movie.posterPath}',
-                                    width: 80,
-                                    height: 120,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  title: Text(
-                                    movie.title,
-                                    style: const TextStyle(
-                                        color: Color(0xFFE2B616)),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  subtitle: Text(
-                                    movie.overview,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              },
-                            ),
-                    )
-                  ],
-                )
+                      // Display ListView for Now Playing Movies
+                      SizedBox(
+                        width: 350,
+                        height: 470,
+                        child: isLoading
+                            ? _buildSkeletonNowPlaying()
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                itemCount: nowPlayingMovies.length,
+                                itemBuilder: (context, index) {
+                                  final movie = nowPlayingMovies[index];
+                                  return ListTile(
+                                    onTap: () {
+                                      context.go('/movie/${movie.id}');
+                                    },
+                                    leading: Image.network(
+                                      'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                                      width: 80,
+                                      height: 120,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    title: Text(
+                                      movie.title,
+                                      style: const TextStyle(
+                                          color: Color(0xFFE2B616)),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Text(
+                                      movie.overview,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                },
+                              ),
+                      )
+                    ],
+                  ),
+                ),
               ],
             ),
             const Padding(
@@ -204,49 +211,123 @@ class _HomePageState extends State<HomePage> {
             // Display Row for Popular Movies
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: isLoading
-                      ? _buildSkeletonPopularMovies()
-                      : List.generate(popularMovies.length, (index) {
+              child: SizedBox(
+                height: 600, // Set an appropriate height
+                child: popularMovies.isEmpty
+                    ? GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 6,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: 12,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 20,
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 6,
+                          childAspectRatio: 0.6,
+                        ),
+                        itemCount: popularMovies.length,
+                        itemBuilder: (context, index) {
                           final movie = popularMovies[index];
                           return GestureDetector(
                             onTap: () {
                               context.go('/movie/${movie.id}');
                             },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              width: 150,
+                            child: Card(
+                              elevation: 4,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.network(
-                                    'https://image.tmdb.org/t/p/w200${movie.posterPath}',
-                                    width: 150,
-                                    height: 200,
-                                    fit: BoxFit.cover,
+                                  Expanded(
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(8),
+                                          topRight: Radius.circular(8)),
+                                      child: Image.network(
+                                        'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                                        width: double.infinity,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(
-                                    height: 8,
+                                    height: 4,
                                   ),
-                                  SizedBox(
-                                    child: Text(
-                                      movie.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          movie.title,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.star,
+                                                color: Colors.amber),
+                                            Text(
+                                                '${movie.voteAverage} (${movie.voteCount} votes)'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Text(
+                                            'Language: ${movie.originalLanguage}'),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Text(
+                                            'Adult: ${movie.adult ? 'Yes' : 'No'}'),
+                                      ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                           );
-                        }),
-                ),
+                        },
+                      ),
               ),
             ),
             const SizedBox(
               height: 20,
-            )
+            ),
           ],
         ),
       ),
@@ -321,7 +402,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               color: Colors.grey[800],
               height: 20,
-            )
+            ),
           ],
         ),
       );

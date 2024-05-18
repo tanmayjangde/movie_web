@@ -237,7 +237,7 @@ class _MoviesPageState extends State<MoviesPage> {
               height: 20,
             ),
             SizedBox(
-              height: 1800,
+              height: 2400,
               child: movies.isEmpty
                   ? Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),

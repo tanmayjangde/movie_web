@@ -296,150 +296,152 @@ class _HomePageState extends State<HomePage> {
             // Display Row for Popular Movies
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: SizedBox(
-                height: popularMovies.isEmpty
-                    ? 1200
-                    : popularMovies.length /
-                        5 *
-                        600, // Set an appropriate height
-                child: popularMovies.isEmpty
-                    ? GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          childAspectRatio: 0.7,
-                        ),
-                        itemCount: 12,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            elevation: 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    color: Colors.grey[800],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return isLoading
+                      ? GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            childAspectRatio: 0.7,
+                          ),
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              elevation: 4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      color: Colors.grey[800],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 20,
-                                    color: Colors.grey[800],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 20,
+                                      color: Colors.grey[800],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                    : GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          childAspectRatio: 0.6,
-                        ),
-                        itemCount: popularMovies.length,
-                        itemBuilder: (context, index) {
-                          final movie = popularMovies[index];
-                          return MouseRegion(
-                            onEnter: (_) {
-                              setState(() {
-                                _hoveredIndex = index;
-                              });
-                            },
-                            onExit: (_) {
-                              setState(() {
-                                _hoveredIndex = null;
-                              });
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              transform: _hoveredIndex == index
-                                  ? (Matrix4.identity()
-                                    ..scale(1.05, 1.05)
-                                    ..translate(0, -10))
-                                  : Matrix4.identity(),
-                              child: GestureDetector(
-                                onTap: () {
-                                  context.go('/movie/${movie.id}');
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Card(
-                                    elevation: _hoveredIndex == index ? 20 : 4,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8)),
-                                            child: Image.network(
-                                              'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
-                                              width: double.infinity,
-                                              height: 200,
-                                              fit: BoxFit.cover,
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            childAspectRatio: 0.6,
+                          ),
+                          itemCount: popularMovies.length,
+                          itemBuilder: (context, index) {
+                            final movie = popularMovies[index];
+                            return MouseRegion(
+                              onEnter: (_) {
+                                setState(() {
+                                  _hoveredIndex = index;
+                                });
+                              },
+                              onExit: (_) {
+                                setState(() {
+                                  _hoveredIndex = null;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                transform: _hoveredIndex == index
+                                    ? (Matrix4.identity()
+                                      ..scale(1.05, 1.05)
+                                      ..translate(0, -10))
+                                    : Matrix4.identity(),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.go('/movie/${movie.id}');
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Card(
+                                      elevation:
+                                          _hoveredIndex == index ? 20 : 4,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(8),
+                                                      topRight:
+                                                          Radius.circular(8)),
+                                              child: Image.network(
+                                                'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                                                width: double.infinity,
+                                                height: 200,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                movie.title,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              const SizedBox(
-                                                height: 4,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(Icons.star,
-                                                      color: Colors.amber),
-                                                  Text(
-                                                      '${movie.voteAverage} (${movie.voteCount} votes)'),
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 4,
-                                              ),
-                                              Text(
-                                                  'Language: ${movie.originalLanguage}'),
-                                              const SizedBox(
-                                                height: 4,
-                                              ),
-                                              Text(
-                                                  'Adult: ${movie.adult ? 'Yes' : 'No'}'),
-                                            ],
+                                          const SizedBox(
+                                            height: 4,
                                           ),
-                                        ),
-                                      ],
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  movie.title,
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.star,
+                                                        color: Colors.amber),
+                                                    Text(
+                                                        '${movie.voteAverage} (${movie.voteCount} votes)'),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Text(
+                                                    'Language: ${movie.originalLanguage}'),
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Text(
+                                                    'Adult: ${movie.adult ? 'Yes' : 'No'}'),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        );
+                },
               ),
             ),
             const SizedBox(

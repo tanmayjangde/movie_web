@@ -367,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                                   context.go('/movie/${movie.id}');
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(10),
                                   child: Card(
                                     elevation: _hoveredIndex == index ? 20 : 4,
                                     child: Column(

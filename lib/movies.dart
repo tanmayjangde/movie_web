@@ -392,7 +392,7 @@ class _MoviesPageState extends State<MoviesPage> {
                                   context.go('/movie/${movie.id}');
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(10),
                                   child: Card(
                                     elevation: _hoveredIndex == index ? 20 : 4,
                                     child: Column(

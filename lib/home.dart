@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: SizedBox(
-                height: 1600, // Set an appropriate height
+                height: 1900, // Set an appropriate height
                 child: popularMovies.isEmpty
                     ? GridView.builder(
                         physics: NeverScrollableScrollPhysics(),

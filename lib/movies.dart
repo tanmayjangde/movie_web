@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,6 +18,7 @@ class _MoviesPageState extends State<MoviesPage> {
   List<Movie> upcomingMovies = [];
   List<Movie> movies = [];
   int selectedFilterIndex = 0;
+  int? _hoveredIndex;
 
   @override
   void initState() {
@@ -96,253 +98,293 @@ class _MoviesPageState extends State<MoviesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(
-              'Explore Movies',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+              child: Text(
+                'Explore Movies',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedFilterIndex = 0;
-                      movies = popularMovies;
-                    });
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade800),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Popular',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: selectedFilterIndex == 0
-                            ? const Color(0xFFE2B616)
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedFilterIndex = 1;
-                      movies = nowPlayingMovies;
-                    });
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade800),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Now Playing',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: selectedFilterIndex == 1
-                            ? const Color(0xFFE2B616)
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedFilterIndex = 2;
-                      movies = upcomingMovies;
-                    });
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade800),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Upcoming',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: selectedFilterIndex == 2
-                            ? const Color(0xFFE2B616)
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedFilterIndex = 3;
-                      movies = topRatedMovies;
-                    });
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade800),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Top Rated',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: selectedFilterIndex == 3
-                            ? const Color(0xFFE2B616)
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: movies.isEmpty
-                ? GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 6,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: 12,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 4,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 20,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedFilterIndex = 0;
+                        movies = popularMovies;
+                      });
                     },
-                  )
-                : GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 6,
-                      childAspectRatio: 0.6,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade800),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Popular',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: selectedFilterIndex == 0
+                              ? const Color(0xFFE2B616)
+                              : Colors.white,
+                        ),
+                      ),
                     ),
-                    itemCount: movies.length,
-                    itemBuilder: (context, index) {
-                      final movie = movies[index];
-                      return GestureDetector(
-                        onTap: () {
-                          context.go('/movie/${movie.id}');
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedFilterIndex = 1;
+                        movies = nowPlayingMovies;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade800),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Now Playing',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: selectedFilterIndex == 1
+                              ? const Color(0xFFE2B616)
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedFilterIndex = 2;
+                        movies = upcomingMovies;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade800),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Upcoming',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: selectedFilterIndex == 2
+                              ? const Color(0xFFE2B616)
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedFilterIndex = 3;
+                        movies = topRatedMovies;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade800),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Top Rated',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: selectedFilterIndex == 3
+                              ? const Color(0xFFE2B616)
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 1800,
+              child: movies.isEmpty
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: 12,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 20,
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                         },
-                        child: Card(
-                          elevation: 4,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      topRight: Radius.circular(8)),
-                                  child: Image.network(
-                                    'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
-                                    width: double.infinity,
-                                    height: 200,
-                                    fit: BoxFit.cover,
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          childAspectRatio: 0.6,
+                        ),
+                        itemCount: movies.length,
+                        itemBuilder: (context, index) {
+                          final movie = movies[index];
+                          return MouseRegion(
+                            onEnter: (_) {
+                              setState(() {
+                                _hoveredIndex = index;
+                              });
+                            },
+                            onExit: (_) {
+                              setState(() {
+                                _hoveredIndex = null;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              transform: _hoveredIndex == index
+                                  ? (Matrix4.identity()
+                                    ..scale(1.05, 1.05)
+                                    ..translate(0, -10))
+                                  : Matrix4.identity(),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.go('/movie/${movie.id}');
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Card(
+                                    elevation: _hoveredIndex == index ? 20 : 4,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8)),
+                                            child: Image.network(
+                                              'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                                              width: double.infinity,
+                                              height: 200,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                movie.title,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.star,
+                                                      color: Colors.amber),
+                                                  Text(
+                                                      '${movie.voteAverage} (${movie.voteCount} votes)'),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                  'Language: ${movie.originalLanguage}'),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                  'Adult: ${movie.adult ? 'Yes' : 'No'}'),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      movie.title,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.star, color: Colors.amber),
-                                        Text(
-                                            '${movie.voteAverage} (${movie.voteCount} votes)'),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text('Language: ${movie.originalLanguage}'),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                        'Adult: ${movie.adult ? 'Yes' : 'No'}'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

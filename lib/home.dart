@@ -213,12 +213,13 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: SizedBox(
-                height: 600, // Set an appropriate height
+                height: 1600, // Set an appropriate height
                 child: popularMovies.isEmpty
                     ? GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 6,
+                          crossAxisCount: 5,
                           childAspectRatio: 0.7,
                         ),
                         itemCount: 12,
@@ -246,9 +247,10 @@ class _HomePageState extends State<HomePage> {
                         },
                       )
                     : GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 6,
+                          crossAxisCount: 5,
                           childAspectRatio: 0.6,
                         ),
                         itemCount: popularMovies.length,

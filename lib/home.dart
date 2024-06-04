@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:movie_web/appbar.dart';
+import 'package:movie_web/drawer.dart';
 import 'package:movie_web/movie_model.dart';
 import 'package:movie_web/responsive.dart';
 
@@ -83,45 +84,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-          child: Column(
-        children: [
-          const SizedBox(
-            height: 15,
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Home',
-                style: TextStyle(
-                  color: Color(0xFFE2B616),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          TextButton(
-            onPressed: () {
-              context.go('/movies');
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Movies',
-                style: TextStyle(
-                  color: Color(0xFFE2B616),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      )),
+      drawer: CustomDrawer(context: context),
       appBar: CustomAppbar(context: context),
       body: SingleChildScrollView(
         child: Column(
@@ -364,7 +327,7 @@ class _HomePageState extends State<HomePage> {
             ),
             // Display Row for Popular Movies
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return isLoading
@@ -378,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                                     ? 5
                                     : (const Responsive().isTablet(context)
                                         ? 3
-                                        : 1),
+                                        : 2),
                             childAspectRatio: 0.7,
                           ),
                           itemCount: 12,
@@ -415,7 +378,7 @@ class _HomePageState extends State<HomePage> {
                                     ? 5
                                     : (const Responsive().isTablet(context)
                                         ? 3
-                                        : 1),
+                                        : 2),
                             childAspectRatio: 0.7,
                           ),
                           itemCount: popularMovies.length,

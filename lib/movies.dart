@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:movie_web/appbar.dart';
+import 'package:movie_web/drawer.dart';
 import 'dart:convert';
 import 'package:movie_web/movie_model.dart';
+import 'package:movie_web/responsive.dart';
 
 class MoviesPage extends StatefulWidget {
   @override
@@ -103,85 +106,8 @@ class _MoviesPageState extends State<MoviesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            SizedBox(
-              width: 50,
-            ),
-            TextButton(
-              onPressed: () {}, // Add functionality here if needed
-              style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFFE2B616),
-              ),
-              child: Text(
-                'TMDB',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              width: 850,
-              height: 45,
-              child: Container(
-                margin: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: TextField(
-                  style: const TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 20),
-                  controller: controller,
-                  onSubmitted: _onSearch,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {},
-                    ),
-                    hintText: 'Search...',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.go('/');
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Home',
-                style: TextStyle(
-                  color: Color(0xFFE2B616),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Padding(
-              padding: EdgeInsets.only(right: 50),
-              child: Text(
-                'Movies',
-                style: TextStyle(
-                  color: Color(0xFFE2B616),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      drawer: CustomDrawer(context: context),
+      appBar: CustomAppbar(context: context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,123 +124,126 @@ class _MoviesPageState extends State<MoviesPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedFilterIndex = 0;
-                        movies = popularMovies;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade800),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Popular',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: selectedFilterIndex == 0
-                              ? const Color(0xFFE2B616)
-                              : Colors.white,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedFilterIndex = 0;
+                          movies = popularMovies;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Popular',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: selectedFilterIndex == 0
+                                ? const Color(0xFFE2B616)
+                                : Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedFilterIndex = 1;
-                        movies = nowPlayingMovies;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade800),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Now Playing',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: selectedFilterIndex == 1
-                              ? const Color(0xFFE2B616)
-                              : Colors.white,
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedFilterIndex = 1;
+                          movies = nowPlayingMovies;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Now Playing',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: selectedFilterIndex == 1
+                                ? const Color(0xFFE2B616)
+                                : Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedFilterIndex = 2;
-                        movies = upcomingMovies;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade800),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Upcoming',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: selectedFilterIndex == 2
-                              ? const Color(0xFFE2B616)
-                              : Colors.white,
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedFilterIndex = 2;
+                          movies = upcomingMovies;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Upcoming',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: selectedFilterIndex == 2
+                                ? const Color(0xFFE2B616)
+                                : Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedFilterIndex = 3;
-                        movies = topRatedMovies;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade800),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Top Rated',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: selectedFilterIndex == 3
-                              ? const Color(0xFFE2B616)
-                              : Colors.white,
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedFilterIndex = 3;
+                          movies = topRatedMovies;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Top Rated',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: selectedFilterIndex == 3
+                                ? const Color(0xFFE2B616)
+                                : Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(
@@ -329,8 +258,13 @@ class _MoviesPageState extends State<MoviesPage> {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                (const Responsive().isDesktop(context))
+                                    ? 5
+                                    : (const Responsive().isTablet(context)
+                                        ? 3
+                                        : 2),
                             childAspectRatio: 0.7,
                           ),
                           itemCount: 12,
@@ -364,9 +298,14 @@ class _MoviesPageState extends State<MoviesPage> {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
-                            childAspectRatio: 0.6,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                (const Responsive().isDesktop(context))
+                                    ? 5
+                                    : (const Responsive().isTablet(context)
+                                        ? 3
+                                        : 2),
+                            childAspectRatio: 0.7,
                           ),
                           itemCount: movies.length,
                           itemBuilder: (context, index) {

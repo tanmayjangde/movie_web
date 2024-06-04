@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:movie_web/movie_model.dart';
+import 'package:movie_web/responsive.dart';
 
 class SearchPage extends StatefulWidget {
   final String query;
@@ -46,11 +48,11 @@ class _SearchPageState extends State<SearchPage> {
         title: Text('Search Results for "${widget.query}"'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : searchResults.isEmpty
-              ? Center(child: Text('No results found.'))
+              ? const Center(child: Text('No results found.'))
               : ListView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: searchResults.length,
                   itemBuilder: (context, index) {
                     final movie = searchResults[index];
@@ -72,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
                                 height: 150,
                                 fit: BoxFit.cover,
                               ),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,60 +83,64 @@ class _SearchPageState extends State<SearchPage> {
                                   children: [
                                     Text(
                                       movie.title,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 8,
                                     ),
                                     Text(
                                       movie.overview,
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 14),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 15,
                                     ),
-                                    Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(Icons.star,
-                                                color: Colors
-                                                    .yellow), // Vote count icon
-                                            Text(
-                                                'Vote Count: ${movie.voteCount}'),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.trending_up,
-                                                color: Colors
-                                                    .orange), // Popularity icon
-                                            Text(
-                                                'Popularity: ${movie.popularity}'),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.calendar_today,
-                                                color: Colors
-                                                    .green), // Release date icon
-                                            Text(
-                                                'Release Date: ${movie.releaseDate}'),
-                                          ],
-                                        ),
-                                      ],
+                                    //Responsive().isMobile ? Container() : SizedBox(height: 5,),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.star,
+                                                  color: Colors
+                                                      .yellow), // Vote count icon
+                                              Text(
+                                                  'Vote Count: ${movie.voteCount}'),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.trending_up,
+                                                  color: Colors
+                                                      .orange), // Popularity icon
+                                              Text(
+                                                  'Popularity: ${movie.popularity}'),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.calendar_today,
+                                                  color: Colors
+                                                      .green), // Release date icon
+                                              Text(
+                                                  'Release Date: ${movie.releaseDate}'),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:movie_web/movie_model.dart';
 
 class MovieDetails extends StatefulWidget {
@@ -19,6 +18,11 @@ class _MovieDetailsState extends State<MovieDetails> {
   List<Movie> similarMovies = [];
   bool isLoading = true;
   int? _hoveredIndex;
+
+  TextEditingController controller = TextEditingController();
+  void _onSearch(String query) {
+    context.go('/search/$query');
+  }
 
   @override
   void initState() {
@@ -60,6 +64,87 @@ class _MovieDetailsState extends State<MovieDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            SizedBox(
+              width: 50,
+            ),
+            TextButton(
+              onPressed: () {}, // Add functionality here if needed
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFE2B616),
+              ),
+              child: Text(
+                'TMDB',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              width: 850,
+              height: 45,
+              child: Container(
+                margin: const EdgeInsets.only(left: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextField(
+                  style: const TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20),
+                  controller: controller,
+                  onSubmitted: _onSearch,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {},
+                    ),
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.go('/');
+            },
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Home',
+                style: TextStyle(
+                  color: Color(0xFFE2B616),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              context.go('/movies');
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 50),
+              child: Text(
+                'Movies',
+                style: TextStyle(
+                  color: Color(0xFFE2B616),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: isLoading
           ? Center(
               child: CircularProgressIndicator(),

@@ -345,10 +345,9 @@ class _MoviesPageState extends State<MoviesPage> {
                                             child: ClipRRect(
                                               borderRadius:
                                                   const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(8),
-                                                      topRight:
-                                                          Radius.circular(8)),
+                                                topLeft: Radius.circular(8),
+                                                topRight: Radius.circular(8),
+                                              ),
                                               child: Image.network(
                                                 'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
                                                 width: double.infinity,
@@ -357,14 +356,12 @@ class _MoviesPageState extends State<MoviesPage> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 4,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                          Expanded(
+                                            // Ensuring content inside card is scrollable
+                                            child: ListView(
+                                              // Wrap with ListView
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               children: [
                                                 Text(
                                                   movie.title,

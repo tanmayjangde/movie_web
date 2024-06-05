@@ -22,16 +22,23 @@ class _MovieDetailsState extends State<MovieDetails> {
   bool isLoading = true;
   int? _hoveredIndex;
 
-  TextEditingController controller = TextEditingController();
-  void _onSearch(String query) {
-    context.go('/search/$query');
-  }
-
   @override
   void initState() {
     super.initState();
     fetchDetails();
     fetchSimilarMovies();
+  }
+
+  @override
+  void didUpdateWidget(covariant MovieDetails oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.movieId != widget.movieId) {
+      setState(() {
+        isLoading = true;
+      });
+      fetchDetails();
+      fetchSimilarMovies();
+    }
   }
 
   Future<void> fetchDetails() async {
@@ -53,7 +60,6 @@ class _MovieDetailsState extends State<MovieDetails> {
         'https://api.themoviedb.org/3/movie/${widget.movieId}/similar?language=en-US&api_key=2f048e3e025ffe9e1552507e8f3c18e4'));
 
     if (response.statusCode == 200) {
-      print(response.body);
       setState(() {
         similarMovies = (json.decode(response.body)['results'] as List)
             .map((movieData) => Movie.fromJson(movieData))
@@ -273,9 +279,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                                             },
                                           )
                                         : GridView.builder(
+                                            shrinkWrap: true,
                                             physics:
                                                 NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
                                             gridDelegate:
                                                 SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount:
@@ -334,14 +340,16 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                           children: [
                                                             Expanded(
                                                               child: ClipRRect(
-                                                                borderRadius: const BorderRadius
-                                                                    .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            8),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            8)),
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                ),
                                                                 child: Image
                                                                     .network(
                                                                   'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
@@ -353,17 +361,14 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 4,
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
+                                                            Expanded(
+                                                              // Ensuring content inside card is scrollable
+                                                              child: ListView(
+                                                                // Wrap with ListView
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
                                                                 children: [
                                                                   Text(
                                                                     movie.title,

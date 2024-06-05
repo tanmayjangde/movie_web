@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
-  TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
   final BuildContext context;
 
   CustomAppbar({super.key, required this.context});
@@ -31,7 +31,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
             width: 15,
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.6,
+            width: MediaQuery.of(context).size.width * 0.55,
             height: 45,
             child: Container(
               margin: const EdgeInsets.only(left: 0),

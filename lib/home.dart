@@ -458,7 +458,7 @@ class _HomePageState extends State<HomePage> {
                                                     Icon(Icons.star,
                                                         color: Colors.amber),
                                                     Text(
-                                                        '${movie.voteAverage} (${movie.voteCount} votes)'),
+                                                        '${movie.voteAverage}'),
                                                   ],
                                                 ),
                                                 const SizedBox(

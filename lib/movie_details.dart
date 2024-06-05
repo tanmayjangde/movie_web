@@ -400,7 +400,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                                           color:
                                                                               Colors.amber),
                                                                       Text(
-                                                                          '${movie.voteAverage} (${movie.voteCount} votes)'),
+                                                                          '${movie.voteAverage}'),
                                                                     ],
                                                                   ),
                                                                   const SizedBox(

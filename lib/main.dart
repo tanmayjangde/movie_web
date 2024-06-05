@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       path: '/movie/:id',
       builder: (context, state) {
         final String id = state.pathParameters['id']!;
-        return MovieDetails(movieId: id);
+        return MovieDetails(movieId: id.toString());
       },
     ),
     GoRoute(

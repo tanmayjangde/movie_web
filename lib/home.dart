@@ -379,7 +379,10 @@ class _HomePageState extends State<HomePage> {
                                     : (const Responsive().isTablet(context)
                                         ? 3
                                         : 2),
-                            childAspectRatio: 0.7,
+                            childAspectRatio:
+                                const Responsive().isMobile(context)
+                                    ? 0.5
+                                    : 0.7,
                           ),
                           itemCount: popularMovies.length,
                           itemBuilder: (context, index) {

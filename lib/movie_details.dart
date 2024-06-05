@@ -292,7 +292,11 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                               .isTablet(context)
                                                           ? 3
                                                           : 2),
-                                              childAspectRatio: 0.7,
+                                              childAspectRatio:
+                                                  const Responsive()
+                                                          .isMobile(context)
+                                                      ? 0.5
+                                                      : 0.7,
                                             ),
                                             itemCount: similarMovies.length,
                                             itemBuilder: (context, index) {

@@ -108,10 +108,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: "7685acd06244ba4be60f455c5cafe5790c63dc91fc03f7385b1e922a6b85b17c"
+      sha256: abec47eb8c8c36ebf41d0a4c64dbbe7f956e39a012b3aafc530e951bdc12fe3f
       url: "https://pub.dev"
     source: hosted
-    version: "14.1.1"
+    version: "14.1.4"
   html:
     dependency: "direct main"
     description:
@@ -220,10 +220,10 @@ packages:
     dependency: "direct main"
     description:
       name: skeletonizer
-      sha256: "50c3fdf3d1bf6182129c03b53bc7ff6dca10ca0b8e71ccdee148b9322caabdba"
+      sha256: d94ae24d9fcedc5fd2984ccbe5af5e9d76e2bf6a35ee775fe8c737c90297908e
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2+1"
+    version: "1.3.0"
   sky_engine:
     dependency: transitive
     description: flutter

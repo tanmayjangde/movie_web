@@ -7,6 +7,7 @@ import 'package:movie_web/appbar.dart';
 import 'package:movie_web/drawer.dart';
 import 'package:movie_web/movie_model.dart';
 import 'package:movie_web/responsive.dart';
+import 'package:movie_web/footer.dart'; // Import the footer
 
 class HomePage extends StatefulWidget {
   @override
@@ -489,6 +490,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
+            CustomFooter(), // Add the footer widget here
           ],
         ),
       ),

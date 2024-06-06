@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:movie_web/movie_model.dart';
 import 'package:movie_web/responsive.dart';
+import 'package:movie_web/footer.dart'; // Import the footer
 
 class SearchPage extends StatefulWidget {
   final String query;
@@ -51,93 +52,104 @@ class _SearchPageState extends State<SearchPage> {
           ? const Center(child: CircularProgressIndicator())
           : searchResults.isEmpty
               ? const Center(child: Text('No results found.'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(10),
-                  itemCount: searchResults.length,
-                  itemBuilder: (context, index) {
-                    final movie = searchResults[index];
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      elevation: 6,
-                      child: InkWell(
-                        onTap: () {
-                          context.go('/movie/${movie.id}');
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              Image.network(
-                                'https://image.tmdb.org/t/p/w200${movie.posterPath}',
-                                width: 100,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        padding: const EdgeInsets.all(10),
+                        itemCount: searchResults.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final movie = searchResults[index];
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            elevation: 6,
+                            child: InkWell(
+                              onTap: () {
+                                context.go('/movie/${movie.id}');
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
                                   children: [
-                                    Text(
-                                      movie.title,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                    Image.network(
+                                      'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                                      width: 100,
+                                      height: 150,
+                                      fit: BoxFit.cover,
                                     ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      movie.overview,
-                                      style: const TextStyle(fontSize: 14),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    //Responsive().isMobile ? Container() : SizedBox(height: 5,),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
+                                    const SizedBox(width: 20),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.star,
-                                                  color: Colors
-                                                      .yellow), // Vote count icon
-                                              Text(
-                                                  'Vote Count: ${movie.voteCount}'),
-                                            ],
+                                          Text(
+                                            movie.title,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(
-                                            width: 20,
+                                            height: 8,
                                           ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.trending_up,
-                                                  color: Colors
-                                                      .orange), // Popularity icon
-                                              Text(
-                                                  'Popularity: ${movie.popularity}'),
-                                            ],
+                                          Text(
+                                            movie.overview,
+                                            style:
+                                                const TextStyle(fontSize: 14),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(
-                                            width: 20,
+                                            height: 15,
                                           ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.calendar_today,
-                                                  color: Colors
-                                                      .green), // Release date icon
-                                              Text(
-                                                  'Release Date: ${movie.releaseDate}'),
-                                            ],
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const Icon(Icons.star,
+                                                        color: Colors
+                                                            .yellow), // Vote count icon
+                                                    Text(
+                                                        'Vote Count: ${movie.voteCount}'),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.trending_up,
+                                                        color: Colors
+                                                            .orange), // Popularity icon
+                                                    Text(
+                                                        'Popularity: ${movie.popularity}'),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.calendar_today,
+                                                        color: Colors
+                                                            .green), // Release date icon
+                                                    Text(
+                                                        'Release Date: ${movie.releaseDate}'),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -145,12 +157,13 @@ class _SearchPageState extends State<SearchPage> {
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                      CustomFooter(), // Add the footer here
+                    ],
+                  ),
                 ),
     );
   }

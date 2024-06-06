@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_web/appbar.dart';
 import 'package:movie_web/drawer.dart';
+import 'package:movie_web/footer.dart';
 import 'dart:convert';
 import 'package:movie_web/movie_model.dart';
 import 'package:movie_web/responsive.dart';
@@ -415,6 +416,7 @@ class _MoviesPageState extends State<MoviesPage> {
                       );
               },
             ),
+            CustomFooter()
           ],
         ),
       ),

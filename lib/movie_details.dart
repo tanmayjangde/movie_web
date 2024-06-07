@@ -310,7 +310,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                       const Responsive()
                                                               .isMobile(context)
                                                           ? 0.5
-                                                          : 0.75,
+                                                          : 0.85,
                                                 ),
                                                 itemCount: similarMovies.length,
                                                 itemBuilder: (context, index) {

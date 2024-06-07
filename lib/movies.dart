@@ -312,7 +312,7 @@ class _MoviesPageState extends State<MoviesPage> {
                             childAspectRatio:
                                 const Responsive().isMobile(context)
                                     ? 0.5
-                                    : 0.7,
+                                    : 0.85,
                           ),
                           itemCount: movies.length,
                           itemBuilder: (context, index) {

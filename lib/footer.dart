@@ -7,7 +7,7 @@ class CustomFooter extends StatelessWidget {
       color: Colors.black,
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '© 2024 MovieWeb. All rights reserved.',
@@ -17,26 +17,35 @@ class CustomFooter extends StatelessWidget {
           ),
           const SizedBox(height: 8.0),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 icon: Icon(Icons.facebook, color: Colors.grey[400]),
                 onPressed: () {
-                  // Add your social media link here
+                  // Add your Facebook link here
                 },
               ),
-              // IconButton(
-              //   icon: Icon(Icons.twitter, color: Colors.grey[400]),
-              //   onPressed: () {
-              //     // Add your social media link here
-              //   },
-              // ),
-              // IconButton(
-              //   icon: Icon(Icons.instagram, color: Colors.grey[400]),
-              //   onPressed: () {
-              //     // Add your social media link here
-              //   },
-              // ),
-              // Add more social media icons as needed
+              IconButton(
+                icon: Icon(Icons.link, color: Colors.grey[400]),
+                onPressed: () {
+                  // Add your Twitter link here
+                },
+                tooltip: 'Twitter',
+              ),
+              IconButton(
+                icon: Icon(Icons.image, color: Colors.grey[400]),
+                onPressed: () {
+                  // Add your Instagram link here
+                },
+                tooltip: 'Instagram',
+              ),
+              IconButton(
+                icon: Icon(Icons.video_library, color: Colors.grey[400]),
+                onPressed: () {
+                  // Add your YouTube link here
+                },
+                tooltip: 'YouTube',
+              ),
             ],
           ),
           const SizedBox(height: 8.0),
